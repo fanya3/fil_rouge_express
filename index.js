@@ -233,6 +233,36 @@ app.put("/api/books/:id", (req, res) => {
   );
 });
 
+// écoute de l'url "/api/books"
+app.put("/api/books/isavailable/:id", (req, res) => {
+    // récupération des données envoyées
+    const idBook = req.params.id;
+    const formData = req.body;
+  
+    // connection à la base de données, et insertion du livre
+    connection.query(
+      "UPDATE books SET is_available = !is_available WHERE id = ?",
+      [idBook],
+      err => {
+        if (err) {
+          // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
+          console.log(err);
+          res
+            .status(500)
+            .send(
+              "Erreur lors de la modification de la disponibilité d'un livre"
+            );
+        } else {
+          // Si tout s'est bien passé, on envoie un statut "ok".
+          res.sendStatus(200);
+        }
+      }
+    );
+  });
+
+
+
+
 //////////////////DELETE//////////////////
 
 // écoute de l'url "/api/employees"
