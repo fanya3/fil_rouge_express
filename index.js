@@ -186,39 +186,10 @@ app.put("/api/books/:id", (req, res) => {
 //////////////////PUT - Toggle du booléen//////////////////
 
 // écoute de l'url "/api/books"
-app.put("/api/books/:id", (req, res) => {
-  // récupération des données envoyées
-  const idBook = req.params.id;
-  const formData = req.body;
-
-  // connection à la base de données, et insertion du livre
-  connection.query(
-    "UPDATE books SET is_available = !is_available WHERE id = ?",
-    [formData, idBook],
-    err => {
-      if (err) {
-        // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-        console.log(err);
-        res
-          .status(500)
-          .send(
-            "Erreur lors de la modification de la disponibilité d'un livre"
-          );
-      } else {
-        // Si tout s'est bien passé, on envoie un statut "ok".
-        res.sendStatus(200);
-      }
-    }
-  );
-});
-
-
-// écoute de l'url "/api/books"
 app.put("/api/books/isavailable/:id", (req, res) => {
     // récupération des données envoyées
     const idBook = req.params.id;
-    const formData = req.body;
-  
+   
     // connection à la base de données, et insertion du livre
     connection.query(
       "UPDATE books SET is_available = !is_available WHERE id = ?",
@@ -246,7 +217,7 @@ app.put("/api/books/isavailable/:id", (req, res) => {
 //////////////////DELETE//////////////////
 
 // écoute de l'url "/api/employees"
-app.delete("/api/books/:id", (req, res) => {
+app.delete("/api/booksdelete/:id", (req, res) => {
   // récupération des données envoyées
   const idBook = req.params.id;
 
@@ -262,6 +233,32 @@ app.delete("/api/books/:id", (req, res) => {
     }
   });
 });
+
+
+
+
+//////////////////DELETE booleen//////////////////
+
+// écoute de l'url "/api/employees"
+app.delete("/api/unaivalaibleooksdelete", (req, res) => {
+  // récupération des données envoyées
+  const idBook = req.params.id;
+
+  // connexion à la base de données, et suppression de l'employé
+  connection.query("DELETE FROM books WHERE is_available = 0", err => {
+    if (err) {
+      // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
+      console.log(err);
+      res.status(500).send("Erreur lors de la suppression d'un livre");
+    } else {
+      // Si tout s'est bien passé, on envoie un statut "ok".
+      res.sendStatus(200);
+    }
+  });
+});
+
+
+
 
 app.listen(port, err => {
   if (err) {
