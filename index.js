@@ -116,12 +116,12 @@ app.get("/api/books/lastparution", (req, res) => {
   );
 });
 
-////////////////// FILTRE DATE ASC/////////////////
+////////////////// FILTRE DATE ASC or DESC/////////////////
 
-app.get("/api/books/parution/ASC", (req, res) => {
+app.get("/api/books/parution/:order", (req, res) => {
   // connection à la base de données, et sélection des employés
   connection.query(
-    "SELECT title, parution_date FROM books ORDER BY parution_date ASC;",
+    `SELECT title, parution_date FROM books ORDER BY parution_date ${order};`,
     (err, results) => {
       if (err) {
         // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
@@ -138,27 +138,6 @@ app.get("/api/books/parution/ASC", (req, res) => {
   );
 });
 
-////////////////// FILTRE DATE DESC/////////////////
-
-app.get("/api/books/parution/DESC", (req, res) => {
-  // connection à la base de données, et sélection des employés
-  connection.query(
-    "SELECT title, parution_date FROM books ORDER BY parution_date DESC;",
-    (err, results) => {
-      if (err) {
-        // Si une erreur est survenue, alors on informe l'utilisateur de l'erreur
-        res
-          .status(500)
-          .send(
-            "rreur lors de la récupération des parutions par ordre chronologique inversé"
-          );
-      } else {
-        // Si tout s'est bien passé, on envoie le résultat de la requête SQL en tant que JSON.
-        res.json(results);
-      }
-    }
-  );
-});
 
 ////////////////// POST /////////////////
 
@@ -232,6 +211,7 @@ app.put("/api/books/:id", (req, res) => {
     }
   );
 });
+
 
 // écoute de l'url "/api/books"
 app.put("/api/books/isavailable/:id", (req, res) => {
